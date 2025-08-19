@@ -1,0 +1,14 @@
+{
+  "input_dat": "C:\\Physionet\\PhysioNetChallange\\samitrop_output\\166371.dat",
+  "rel_path": "166371.dat",
+  "mode": "wfdb",
+  "fs": 400.0,
+  "lead_index": 0,
+  "lead_name": "I",
+  "pre_sec": 0.25,
+  "post_sec": 0.45,
+  "target_len": 300,
+  "r_index": 249,
+  "r_time_s": 0.6225,
+  "neurokit_used": true
+}

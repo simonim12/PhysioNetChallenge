@@ -1,0 +1,14 @@
+{
+  "regression": {
+    "mse": 0.2514057407323581,
+    "r2": -0.005622962929432429
+  },
+  "detection": {
+    "accuracy": 0.5,
+    "roc_auc": 0.4685798816568048,
+    "pr_auc": 0.514014991465774,
+    "threshold": 0.05
+  },
+  "n_features": 14,
+  "notes": "Features: HRV (hr_mean/std, rr_mean/std, rmssd, pnn50), bandpowers, simple morphology (R amplitude, QRS width)."
+}

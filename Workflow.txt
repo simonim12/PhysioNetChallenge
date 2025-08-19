@@ -1,0 +1,22 @@
+1.download raw compressed data from physionet website
+ a) samitrop
+ b) pbxl
+
+2)Generate  data files utilizing the suggested steps
+        a)samitrop_output   
+	b)ptbxl_output
+
+3)create one beat data files in the output folder utilizing beat_extractor.py
+	one_beat_out_samitrop
+	one_beat_out_pbxl
+
+
+4) visualize one bit data utilizing visualize_one_beat_data.py
+           a) viz_beats folder contains all the plots
+
+5) create labels.csv by running make_labels.ps1 samitrop files as 1 and pbxl files as 0    
+
+6) create model by taking data frm
+5) feed data from 4)to the model
+6) run model with data
+7)evaluate model

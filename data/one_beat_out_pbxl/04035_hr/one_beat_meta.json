@@ -1,0 +1,14 @@
+{
+  "input_dat": "C:\\Physionet\\PhysioNetChallange\\ptbxl_output\\04000\\04035_hr.dat",
+  "rel_path": "04035_hr.dat",
+  "mode": "wfdb",
+  "fs": 500.0,
+  "lead_index": 0,
+  "lead_name": "I",
+  "pre_sec": 0.25,
+  "post_sec": 0.45,
+  "target_len": 300,
+  "r_index": 206,
+  "r_time_s": 0.412,
+  "neurokit_used": true
+}
