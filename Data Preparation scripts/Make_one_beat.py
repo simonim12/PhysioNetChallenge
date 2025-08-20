@@ -198,7 +198,7 @@ def process_one_folder(folder_path, out_root, root, pre_sec, post_sec, target_le
                 with open(hea_out, "w") as fout:
                     fout.write(f"one_beat 1 {fs} {len(beat)} 16\n")
                     label = 1 if "samitrop" in dat_path.lower() else 0
-                    fout.write(f"# Label: {label}\n")
+                    fout.write(f"# Chagas label: {label}\n")
 
                 beats.append(beat)
                 rows.append(meta)
