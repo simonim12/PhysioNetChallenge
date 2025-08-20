@@ -1,0 +1,10 @@
+1. Use ptbxl_output to read data and create run feature extraction        (Create_one_beat_file.ps1)
+Create_one_beat_file.ps1 will use make_one_beat.py run through all folders of ptbxl_output and extract features from all folders
+use samitrop_output to extract features
+run make_one_beat file 
+Copy all .hea and .csv to the data folder
+train model on .csv
+
+#data travels in the following path in this project
+# raw data => ptbxl_output=>Data Processing => data (.hea and .csv)
+# raw data => samitrop_output=>Data Processing => data (.hea and .csv)

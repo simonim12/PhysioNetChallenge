@@ -1,0 +1,29 @@
+$source = "C:\Physionet\PhysioNetChallange\data Processing"
+$destination = "C:\Physionet\PhysioNetChallange\data"
+
+# Create destination folder if it doesn't exist
+if (!(Test-Path -Path $destination)) {
+    New-Item -ItemType Directory -Path $destination | Out-Null
+}
+
+# Helper function to create destination filename as foldername + filename
+function Get-DestFilename($file) {
+    $parentFolder = Split-Path $file.DirectoryName -Leaf
+    return "${parentFolder}_$($file.Name)"
+}
+
+# Copy all one_beat.csv files from subfolders to destination with foldername prefix
+Get-ChildItem -Path $source -Recurse -Filter "one_beat.csv" | ForEach-Object {
+    $destName = Get-DestFilename $_
+    $destPath = Join-Path $destination $destName
+    Copy-Item -Path $_.FullName -Destination $destPath -Force
+    Write-Host "Copied $($_.FullName) to $destPath"
+}
+
+# Copy all one_beat.hea files from subfolders to destination with foldername prefix
+Get-ChildItem -Path $source -Recurse -Filter "one_beat.hea" | ForEach-Object {
+    $destName = Get-DestFilename $_
+    $destPath = Join-Path $destination $destName
+    Copy-Item -Path $_.FullName -Destination $destPath -Force
+    Write-Host "Copied $($_.FullName) to $destPath"
+}
