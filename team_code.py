@@ -12,6 +12,7 @@
 import joblib
 import numpy as np
 import os
+from sklearn import base
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 import sys
 import glob
@@ -35,7 +36,7 @@ def train_model(data_folder, model_folder, verbose):
 
     #records = find_records(data_folder)
     records = glob.glob(os.path.join(data_folder, '**', 'one_beat.csv'), recursive=True)
-    print("Found records:", records)  # added this line
+    #print("Found records:", records)  # added this line
 
     num_records = len(records)
 
@@ -52,7 +53,8 @@ def train_model(data_folder, model_folder, verbose):
     for i in range(num_records):
         if verbose:
             width = len(str(num_records))
-            print(f'- {i+1:>{width}}/{num_records}: {records[i]}...')
+           #clear
+           #  print(f'- {i+1:>{width}}/{num_records}: {records[i]}...')
         record = records[i]
         age, sex, source, signal_mean, signal_std = extract_features(record)
         label = load_label(record)
@@ -147,7 +149,11 @@ def extract_features(record):
 
     # Load the signal data directly from one_beat.csv in the same folder as the .hea file
     import pandas as pd
-    csv_path = os.path.join(os.path.dirname(record), "one_beat.csv")
+    base = os.path.basename(record)
+    if not base.endswith('.csv'):
+        base += '.csv'
+    csv_path = os.path.join("data", base)
+    #print("csv_path:", csv_path)
     if not os.path.isfile(csv_path):
         raise FileNotFoundError(f"Signal file not found: {csv_path}")
     df = pd.read_csv(csv_path)
@@ -184,3 +190,6 @@ def save_model(model_folder, model):
     #d = {'model': model}
     filename = os.path.join(model_folder, 'model_gpr.joblib')
     joblib.dump(model, filename, protocol=0)
+
+   
+
