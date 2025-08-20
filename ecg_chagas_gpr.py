@@ -4,6 +4,9 @@ ECG -> features -> Gaussian Process Regression (GPR) detector for Chagas disease
 - Supports .dat int16 little-endian (no header) or ASCII numeric files.
 - Extracts HRV stats, simple morphology, and bandpowers.
 - Trains GPR (RBF kernel) on features with optional Platt calibration + F1 threshold.
+
+python ecg_chagas_gpr.py  --data-dir data --labels labels.csv --fs 360 --format int16le --calibrate --max-samples 10 --outdir model
+Currently trained with max-samples 2100
 """
 from __future__ import annotations
 
@@ -194,7 +197,9 @@ def load_label_map(labels_csv: str) -> dict:
 
 
 def load_all_one_beat_csv(data_dir):
-    csv_files = glob.glob(os.path.join(data_dir, '**', 'one_beat.csv'), recursive=True)
+    #csv_files = glob.glob(os.path.join(data_dir, '**', 'one_beat.csv'), recursive=True)
+    csv_files = glob.glob(os.path.join(data_dir, '*.csv'))
+
     data = []
     filenames = []
     for csv_file in csv_files:
@@ -206,8 +211,10 @@ def load_all_one_beat_csv(data_dir):
                 signal = df.values.flatten().astype(np.float64)
             data.append(signal)
             # Use folder name + _one_beat.hea for label lookup
-            folder_name = os.path.basename(os.path.dirname(csv_file))
-            filenames.append(f"{folder_name}_one_beat.hea")
+            #folder_name = os.path.basename(os.path.dirname(csv_file))
+            #filenames.append(f"{folder_name}_one_beat.csv")
+            #folder_name = os.path.basename(os.path.dirname(csv_file))
+            filenames.append(os.path.basename(csv_file))
         except Exception as e:
             print(f"Error reading {csv_file}: {e}")
     return data, filenames
@@ -315,7 +322,8 @@ def main():
         pass
 
     X = df.values.astype(np.float64)
-
+    print("Number of samples loaded:", len(X))
+    print("Number of labels loaded:", len(y))
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=cfg.test_size, stratify=y, random_state=cfg.random_state
     )
@@ -332,10 +340,12 @@ def main():
 
     # GPR with (Constant * RBF) + White noise
     nfeat = X_train.shape[1]
+    #kernel = C(1.0, (1e-3, 1e3)) * RBF(length_scale=np.ones(nfeat), length_scale_bounds=(1e-2, 1e3)) \
+    #         + WhiteKernel(noise_level=1e-3, #noise_level_bounds=(1e-6, 1e0))
     kernel = C(1.0, (1e-3, 1e3)) * RBF(length_scale=np.ones(nfeat), length_scale_bounds=(1e-2, 1e3)) \
-             + WhiteKernel(noise_level=1e-3, noise_level_bounds=(1e-6, 1e0))
+             + WhiteKernel(noise_level=1e-3, noise_level_bounds=(1e-10, 1e0))
     gpr = GaussianProcessRegressor(
-        kernel=kernel, alpha=1e-6, normalize_y=True, n_restarts_optimizer=2, random_state=cfg.random_state
+        kernel=kernel, alpha=1e-6, normalize_y=True, n_restarts_optimizer=6, random_state=cfg.random_state
     )
     gpr.fit(X_train, y_train)
 
@@ -343,7 +353,8 @@ def main():
     mu_test = gpr.predict(X_test)
     mse = mean_squared_error(y_test, mu_test)
     r2  = r2_score(y_test, mu_test)
-
+    print("Number of samples loaded:", len(X))
+    print("Number of labels loaded:", len(y))
     # Calibration
     if cfg.calibrate:
         # take 20% from train as val
