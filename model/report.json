@@ -1,13 +1,13 @@
 {
   "regression": {
-    "mse": 0.19267804178824027,
-    "r2": 0.2292878328470389
+    "mse": 0.003775843144659926,
+    "r2": 0.9848966274213603
   },
   "detection": {
-    "accuracy": 0.6714285714285714,
-    "roc_auc": 0.7771882086167801,
-    "pr_auc": 0.7657794846392241,
-    "threshold": 0.35
+    "accuracy": 0.9952380952380953,
+    "roc_auc": 0.9999546485260771,
+    "pr_auc": 0.9999547559940247,
+    "threshold": 0.1
   },
   "n_features": 14,
   "notes": "Features: HRV (hr_mean/std, rr_mean/std, rmssd, pnn50), bandpowers, simple morphology (R amplitude, QRS width)."
